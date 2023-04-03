@@ -22,8 +22,7 @@ pip install -r requirements.txt
 ## Running GlueStick 🏃
 Download the weights of the model:
 ```
-pip install gdown
-gdown -O resources/weights/checkpoint_GlueStick_MD.tar https://drive.google.com/uc?id=1Gw26jVaU9fwOemQ3jBVINdJFdMXpV8Qv&export=download
+wget https://github.com/cvg/GlueStick/releases/download/v0.1_arxiv/checkpoint_GlueStick_MD.tar -P resources/weights
 ```
 
 You can execute the inference with it with:
