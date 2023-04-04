@@ -1,4 +1,5 @@
 # GlueStick
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/cvg/GlueStick/blob/main/gluestick_matching_demo.ipynb) [![Project Page](https://badgen.net/badge/color/project/green?icon=awesome&label)](https://iago-suarez.com/gluestick)
 Joint deep matcher for points and lines 🖼️💥🖼️
 
 ![Visualization of point and line matches](resources/demo_seq1.gif)
