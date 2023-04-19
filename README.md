@@ -1,5 +1,5 @@
 # GlueStick
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/cvg/GlueStick/blob/main/gluestick_matching_demo.ipynb) [![Project Page](https://badgen.net/badge/color/project/green?icon=awesome&label)](https://iago-suarez.com/gluestick)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/cvg/GlueStick/blob/main/gluestick_matching_demo.ipynb) [![arXiv](https://img.shields.io/badge/arXiv-2304.02008-b31b1b.svg?style=flat)](https://arxiv.org/abs/2304.02008) [![Project Page](https://badgen.net/badge/color/project/green?icon=awesome&label)](https://iago-suarez.com/gluestick)
 
 Joint deep matcher for points and lines 🖼️💥🖼️
 
