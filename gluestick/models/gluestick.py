@@ -36,8 +36,7 @@ class GlueStick(BaseModel):
     required_data_keys = [
         'keypoints0', 'keypoints1',
         'descriptors0', 'descriptors1',
-        'keypoint_scores0', 'keypoint_scores1',
-        'pl_associativity0', 'pl_associativity1']
+        'keypoint_scores0', 'keypoint_scores1']
 
     DEFAULT_LOSS_CONF = {'nll_weight': 1., 'nll_balancing': 0.5, 'reward_weight': 0., 'bottleneck_l2_weight': 0.}
 
@@ -95,8 +94,12 @@ class GlueStick(BaseModel):
             self.load_state_dict(state_dict)
 
     def _forward(self, data):
-        device = data['image0'].device
-        b_size = len(data['image0'])
+        device = data['keypoints0'].device
+        b_size = len(data['keypoints0'])
+        image_size0 = (data['image_size0'] if 'image_size0' in data
+                       else data['image0'].shape)
+        image_size1 = (data['image_size1'] if 'image_size1' in data
+                       else data['image1'].shape)
 
         pred = {}
         desc0, desc1 = data['descriptors0'], data['descriptors1']
@@ -150,10 +153,8 @@ class GlueStick(BaseModel):
             desc0 = self.input_proj(desc0)
             desc1 = self.input_proj(desc1)
 
-        kpts0 = normalize_keypoints(
-            kpts0, data.get('image_size0', data['image0'].shape))
-        kpts1 = normalize_keypoints(
-            kpts1, data.get('image_size1', data['image1'].shape))
+        kpts0 = normalize_keypoints(kpts0, image_size0)
+        kpts1 = normalize_keypoints(kpts1, image_size1)
 
         assert torch.all(kpts0 >= -1) and torch.all(kpts0 <= 1)
         assert torch.all(kpts1 >= -1) and torch.all(kpts1 <= 1)
@@ -162,11 +163,9 @@ class GlueStick(BaseModel):
 
         if n_lines0 != 0 and n_lines1 != 0:
             # Pre-compute the line encodings
-            lines0 = normalize_keypoints(
-                lines0, data.get('image_size0', data['image0'].shape)).reshape(
+            lines0 = normalize_keypoints(lines0, image_size0).reshape(
                 b_size, n_lines0, 2, 2)
-            lines1 = normalize_keypoints(
-                lines1, data.get('image_size1', data['image1'].shape)).reshape(
+            lines1 = normalize_keypoints(lines1, image_size1).reshape(
                 b_size, n_lines1, 2, 2)
             line_enc0 = self.lenc(lines0, data['line_scores0'])
             line_enc1 = self.lenc(lines1, data['line_scores1'])
@@ -197,7 +196,7 @@ class GlueStick(BaseModel):
         # Match the lines
         if n_lines0 > 0 and n_lines1 > 0:
             (line_scores, m0_lines, m1_lines, mscores0_lines,
-             mscores1_lines) = self._get_line_matches(
+             mscores1_lines, raw_line_scores) = self._get_line_matches(
                 desc0[:, :, :2 * n_lines0], desc1[:, :, :2 * n_lines1],
                 lines_junc_idx0, lines_junc_idx1, self.final_line_proj)
             if self.conf.inter_supervision:
@@ -224,11 +223,14 @@ class GlueStick(BaseModel):
                 (b_size, n_lines0), device=device, dtype=torch.float32)
             mscores1_lines = torch.zeros(
                 (b_size, n_lines1), device=device, dtype=torch.float32)
+            raw_line_scores = torch.zeros(b_size, n_lines0, n_lines1,
+                                          dtype=torch.float, device=device)
         pred['line_log_assignment'] = line_scores
         pred['line_matches0'] = m0_lines
         pred['line_matches1'] = m1_lines
         pred['line_match_scores0'] = mscores0_lines
         pred['line_match_scores1'] = mscores1_lines
+        pred['raw_line_scores'] = raw_line_scores
 
         return pred
 
@@ -268,13 +270,14 @@ class GlueStick(BaseModel):
                                            n2_lines1 // 2, 2))
 
         # Match either in one direction or the other
-        line_scores = 0.5 * torch.maximum(
+        raw_line_scores = 0.5 * torch.maximum(
             line_scores[:, :, 0, :, 0] + line_scores[:, :, 1, :, 1],
             line_scores[:, :, 0, :, 1] + line_scores[:, :, 1, :, 0])
-        line_scores = log_double_softmax(line_scores, self.line_bin_score)
+        line_scores = log_double_softmax(raw_line_scores, self.line_bin_score)
         m0_lines, m1_lines, mscores0_lines, mscores1_lines = self._get_matches(
             line_scores)
-        return line_scores, m0_lines, m1_lines, mscores0_lines, mscores1_lines
+        return (line_scores, m0_lines, m1_lines, mscores0_lines,
+                mscores1_lines, raw_line_scores)
 
     def loss(self, pred, data):
         raise NotImplementedError()
