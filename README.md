@@ -42,7 +42,7 @@ If you use this code in your project, please consider citing the following paper
 @article{pautrat_suarez_2023_gluestick,
     title={{GlueStick}: Robust Image Matching by Sticking Points and Lines Together},
     author={Pautrat, R{\'e}mi* and Su{\'a}rez, Iago* and Yu, Yifan and Pollefeys, Marc and Larsson, Viktor},
-    journal={ArXiv},
+    journal={International Conference on Computer Vision (ICCV)},
     year={2023}
 }
 ```
