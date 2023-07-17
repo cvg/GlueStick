@@ -6,7 +6,7 @@ Joint deep matcher for points and lines 🖼️💥🖼️
 ![Visualization of point and line matches](resources/demo_seq1.gif)
 
 This repository contains the official implementation of 
-[GlueStick: Robust Image Matching by Sticking Points and Lines Together](https://arxiv.org/abs/2304.02008).
+[GlueStick: Robust Image Matching by Sticking Points and Lines Together](https://arxiv.org/abs/2304.02008), accepted at ICCV 2023.
 
 ## Install 🛠️
 
