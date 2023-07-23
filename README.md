@@ -36,6 +36,13 @@ python -m gluestick.run -img1 resources/img1.jpg -img2 resources/img2.jpg
 ## Training 🏋️
 We want to provide you with high-quality and flexible code for training. Stay tuned, we will release it soon!
 
+## Licence 📜
+Our code is licenced under [MIT licence](https://github.com/cvg/GlueStick/blob/main/LICENSE).
+However, bear in mind that it uses a SuperPoint backbone that has a 
+[non-commercial licence](https://github.com/magicleap/SuperPointPretrainedNetwork/blob/master/LICENSE). 
+Therefore, the overall system is non-commercial 😞. We are working on an analogous version based on 
+[DISK](https://github.com/cvlab-epfl/disk) to avoid this problem.
+
 ## Citation 📝
 If you use this code in your project, please consider citing the following paper:
 ```bibtex
