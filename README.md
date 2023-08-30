@@ -46,10 +46,10 @@ Therefore, the overall system is non-commercial 😞. We are working on an analo
 ## Citation 📝
 If you use this code in your project, please consider citing the following paper:
 ```bibtex
-@article{pautrat_suarez_2023_gluestick,
+@InProceedings{pautrat_suarez_2023_gluestick,
     title={{GlueStick}: Robust Image Matching by Sticking Points and Lines Together},
     author={Pautrat, R{\'e}mi* and Su{\'a}rez, Iago* and Yu, Yifan and Pollefeys, Marc and Larsson, Viktor},
-    journal={International Conference on Computer Vision (ICCV)},
+    booktitle={International Conference on Computer Vision (ICCV)},
     year={2023}
 }
 ```
