@@ -3,6 +3,8 @@
 
 Joint deep matcher for points and lines 🖼️💥🖼️
 
+**Update: we are pleased to announce that the training code has been released within our new training framework, [GlueFactory](https://github.com/cvg/glue-factory).**
+
 ![Visualization of point and line matches](resources/demo_seq1.gif)
 
 This repository contains the official implementation of 
@@ -34,7 +36,7 @@ python -m gluestick.run -img1 resources/img1.jpg -img2 resources/img2.jpg
 ```
 
 ## Training 🏋️
-We want to provide you with high-quality and flexible code for training. Stay tuned, we will release it soon!
+The training code is available in a separate repository, [GlueFactory](https://github.com/cvg/glue-factory). Within GlueFactory, you can not only train GlueStick, but also other deep matchers such as [LightGlue](https://github.com/cvg/LightGlue), use multiple feature extractors, line extractors, robust estimators, as well as run evaluations on multiple benchmarks.
 
 ## Licence 📜
 Our code is licenced under [MIT licence](https://github.com/cvg/GlueStick/blob/main/LICENSE).
