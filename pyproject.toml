@@ -1,0 +1,10 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools" ]
+
+[project]
+name = "gluestick"
+version = "0.0.0"
+
+[tool.setuptools.packages.find]
+include = [ "gluestick", "gluestick.*" ]
