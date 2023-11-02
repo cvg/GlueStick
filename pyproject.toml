@@ -20,5 +20,8 @@ dependencies = [
     "pytlsd @ git+https://github.com/iago-suarez/pytlsd.git@37ac583",
 ]
 
+[project.scripts]
+gluestick-run = "gluestick.run:main"
+
 [tool.setuptools.packages.find]
 include = [ "gluestick", "gluestick.*" ]
