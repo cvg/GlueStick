@@ -21,6 +21,7 @@ def main():
     parser.add_argument('--max_pts', type=int, default=1000)
     parser.add_argument('--max_lines', type=int, default=300)
     parser.add_argument('--skip-imshow', default=False, action='store_true')
+    parser.add_argument('--weights', default=str(GLUESTICK_ROOT / 'resources' / 'weights' / 'checkpoint_GlueStick_MD.tar'))
     args = parser.parse_args()
 
     # Evaluation config
@@ -41,7 +42,7 @@ def main():
         },
         'matcher': {
             'name': 'gluestick',
-            'weights': str(GLUESTICK_ROOT / 'resources' / 'weights' / 'checkpoint_GlueStick_MD.tar'),
+            'weights': args.weights,
             'trainable': False,
         },
         'ground_truth': {
