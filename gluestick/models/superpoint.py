@@ -106,7 +106,12 @@ class SuperPoint(BaseModel):
                 c5, conf.descriptor_dim, kernel_size=1, stride=1, padding=0)
 
         path = GLUESTICK_ROOT / 'resources' / 'weights' / 'superpoint_v1.pth'
-        self.load_state_dict(torch.load(str(path)), strict=False)
+        if path.exists():
+            weights = torch.load(str(path), map_location='cpu')
+        else:
+            weights_url = "https://github.com/cvg/GlueStick/raw/main/resources/weights/superpoint_v1.pth"
+            weights = torch.hub.load_state_dict_from_url(weights_url, map_location='cpu')
+        self.load_state_dict(weights, strict=False)
 
     def _forward(self, data):
         image = data['image']

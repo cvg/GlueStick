@@ -1,3 +1,4 @@
+import os.path
 import warnings
 from copy import deepcopy
 
@@ -87,7 +88,11 @@ class GlueStick(BaseModel):
 
         if conf.weights:
             assert isinstance(conf.weights, str)
-            state_dict = torch.load(conf.weights, map_location='cpu')
+            if os.path.exists(conf.weights):
+                state_dict = torch.load(conf.weights, map_location='cpu')
+            else:
+                weights_url = "https://github.com/cvg/GlueStick/releases/download/v0.1_arxiv/checkpoint_GlueStick_MD.tar"
+                state_dict = torch.hub.load_state_dict_from_url(weights_url, map_location='cpu')
             if 'model' in state_dict:
                 state_dict = {k.replace('matcher.', ''): v for k, v in state_dict['model'].items() if 'matcher.' in k}
                 state_dict = {k.replace('module.', ''): v for k, v in state_dict.items()}

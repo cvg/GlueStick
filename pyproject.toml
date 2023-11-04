@@ -1,0 +1,30 @@
+[project]
+name = "gluestick"
+description = "GlueStick: Robust Image Matching by Sticking Points and Lines Together"
+version = "0.0.0"
+authors = [
+    { name = "Rémi Pautrat" },
+    { name = "Iago Suárez" },
+]
+readme = "README.md"
+requires-python = ">=3.8"
+
+
+license = { file = "LICENSE" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+urls = { Repository = "https://github.com/cvg/GlueStick/" }
+dynamic = ["dependencies"]
+
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools"]
+
+[tool.setuptools.packages.find]
+include = ["gluestick", "gluestick.*"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }

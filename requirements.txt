@@ -1,3 +1,4 @@
+build
 numpy
 matplotlib
 scipy
@@ -9,4 +10,4 @@ torch>=1.12
 torchvision>=0.13
 setuptools
 tqdm
-git+https://github.com/iago-suarez/pytlsd.git@37ac583
+pytlsd@git+https://github.com/iago-suarez/pytlsd.git@37ac583
