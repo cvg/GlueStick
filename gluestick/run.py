@@ -98,7 +98,7 @@ def main():
     plot_images([img0, img1], ['Image 1 - point matches', 'Image 2 - point matches'], dpi=200, pad=2.0)
     plot_matches(matched_kps0, matched_kps1, 'green', lw=1, ps=0)
     plt.gcf().canvas.manager.set_window_title('Point Matches')
-    plt.savefig('detected_points.png')
+    plt.savefig('point_matches.png')
     if not args.skip_imshow:
         plt.show()
 
