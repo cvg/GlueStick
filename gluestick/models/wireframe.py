@@ -249,7 +249,7 @@ class SPWireframeDescriptor(BaseModel):
                 'lines': lines,
                 'orig_lines': orig_lines,
                 'lines_junc_idx': lines_junc_idx,
-                'line_scores': line_scores,
+                'line_scores': line_pts_scores[:, ::2],
                 'valid_lines': valid_lines}
 
     @staticmethod
