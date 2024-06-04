@@ -26,8 +26,8 @@ def lines_to_wireframe(lines, line_scores, all_descs, conf):
     device = lines.device
     endpoints = lines.reshape(b_size, -1, 2)
 
-    (junctions, junc_scores, junc_descs, connectivity, new_lines,
-     lines_junc_idx, num_true_junctions) = [], [], [], [], [], [], []
+    (junctions, junc_scores, junc_descs, connectivity, new_lines, new_line_score
+     lines_junc_idx, num_true_junctions) = [], [], [], [], [], [], [], []
     for bs in range(b_size):
         # Cluster the junctions that are close-by
         db = DBSCAN(eps=conf.nms_radius, min_samples=1).fit(
@@ -55,6 +55,9 @@ def lines_to_wireframe(lines, line_scores, all_descs, conf):
         new_lines.append(junctions[-1][clusters].reshape(-1, 2, 2))
         lines_junc_idx.append(clusters.reshape(-1, 2))
 
+        # Compute the new line scores
+        new_line_score.append(new_scores[lines_junc_idx[-1]].mean(dim=1))
+        
         # Compute the junction connectivity
         junc_connect = torch.eye(n_clusters, dtype=torch.bool,
                                  device=device)
@@ -69,8 +72,9 @@ def lines_to_wireframe(lines, line_scores, all_descs, conf):
 
     new_lines = torch.stack(new_lines, dim=0)
     lines_junc_idx = torch.stack(lines_junc_idx, dim=0)
+    new_line_score = torch.stack(new_line_score, dim=0)
     return (junctions, junc_scores, junc_descs, connectivity,
-            new_lines, lines_junc_idx, num_true_junctions)
+            new_lines, lines_junc_idx, num_true_junctions, new_line_score)
 
 
 class SPWireframeDescriptor(BaseModel):
@@ -193,7 +197,7 @@ class SPWireframeDescriptor(BaseModel):
         if self.conf.wireframe_params.merge_line_endpoints and len(lines[0]) > 0:
             # Merge first close-by endpoints to connect lines
             (line_points, line_pts_scores, line_descs, line_association,
-             lines, lines_junc_idx, num_true_junctions) = lines_to_wireframe(
+             lines, lines_junc_idx, num_true_junctions, line_scores) = lines_to_wireframe(
                 lines, line_scores, pred['all_descriptors'],
                 conf=self.conf.wireframe_params)
 
