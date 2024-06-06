@@ -197,6 +197,12 @@ class SPWireframeDescriptor(BaseModel):
                 lines, line_scores, pred['all_descriptors'],
                 conf=self.conf.wireframe_params)
 
+            # Estimate endpoints scores
+            kps = line_pts_scores / line_pts_scores.new_tensor([w, h])
+            kps = kps * 2 - 1  # normalize to (-1, 1)
+            junc_scores = torch.nn.functional.grid_sample(pred['dense_score'].unsqueeze(1), kps.view(b_size, 1, -1, 2), mode="bilinear", 
+                                                          align_corners=False).squeeze() * (line_pts_scores > 0).float()
+
             # Add the keypoints to the junctions and fill the rest with random keypoints
             (all_points, all_scores, all_descs,
              pl_associativity) = [], [], [], []
@@ -204,7 +210,7 @@ class SPWireframeDescriptor(BaseModel):
                 all_points.append(torch.cat(
                     [line_points[bs], pred['keypoints'][bs]], dim=0))
                 all_scores.append(torch.cat(
-                    [line_pts_scores[bs], pred['keypoint_scores'][bs]], dim=0))
+                    [junc_scores[bs], pred['keypoint_scores'][bs]], dim=0))
                 all_descs.append(torch.cat(
                     [line_descs[bs], pred['descriptors'][bs]], dim=1))
 
